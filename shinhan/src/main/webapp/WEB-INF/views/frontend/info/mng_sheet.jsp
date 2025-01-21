@@ -340,8 +340,8 @@ String pageTitle = SessionUtil.getProperties("mes.company");
 	        },
 	        multiSelect: true,
 	        columns: [                
-				{ field:'in_date', caption:'입고일자', size:'70px', style:'text-align:center', frozen: true }, 
-				{ field:'out_date', caption:'출고일자', size:'70px', style:'text-align:center', frozen: true }, 
+				{ field:'in_date', caption:'입고일자', size:'70px', style:'text-align:center', sortable: true, frozen: true }, 
+				{ field:'out_date', caption:'출고일자', size:'70px', style:'text-align:center', sortable: true, frozen: true }, 
 				{ field:'step', caption:'STEP', size:'70px', style:'text-align:center', frozen: true }, 
 				{ field:'item_no', caption:'Item No', size:'160px', style:'text-align:center', frozen: true },
 				{ field:'lot_no', caption:'Lot No', size:'160px', style:'text-align:center', frozen: true }, 
