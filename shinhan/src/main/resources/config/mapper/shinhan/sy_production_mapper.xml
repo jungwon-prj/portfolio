@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.passcombine.shinhan.dao.SYProductionDAO">
+
+<!-- 	p2prod -->
+	<select id="selectP2Prod" parameterType="SYP2ProdVo" resultType="SYP2ProdVo">
+		SELECT
+			p2key,
+			dataseq,
+			prod_gubun,
+			step,
+			after_process,
+			stack,
+			customer_nm,
+			prod_div,
+			layer,
+			model,
+			item_no,
+			lengh,
+			s_pi,
+			item_nm,
+			item_size_l,
+			item_size_r,
+			item_size_thin,
+			hole,
+			x_axis,
+			y_axis,
+			creator,
+			date_created
+		FROM p2_prod_tbl WHERE 1=1
+		<if test="date_created !=null and !''.equals( date_created ) ">
+			AND date_format(date_created, '%Y%m%d') BETWEEN LEFT(#{date_created}, 8) AND RIGHT(#{date_created}, 8)
+		</if>
+		<if test="item_no != null and '' != item_no">
+			AND item_no LIKE CONCAT ('%', #{item_no}, '%')
+		</if> 
+		<if test="customer_nm != null and '' != customer_nm">
+			AND customer_nm LIKE CONCAT ('%', #{customer_nm}, '%')
+		</if> 
+	</select>
+
+<!--  대량 엑셀 등록 -->
+  <insert id="excelUploadP2Prod" parameterType="List" >
+    INSERT INTO p2_prod_tbl
+        (
+			p2key,
+			dataseq,
+			prod_gubun,
+			step,
+			after_process,
+			stack,
+			customer_nm,
+			prod_div,
+			layer,
+			model,
+			item_no,
+			lengh,
+			s_pi,
+			item_nm,
+			item_size_l,
+			item_size_r,
+			item_size_thin,
+			hole,
+			x_axis,
+			y_axis,
+			creator,
+			date_created
+        )
+      VALUES
+      <foreach collection="list" item="item" separator="," > 
+        ( 
+			fn_p2_gen_key(),
+			#{item.dataseq},
+			#{item.prod_gubun},
+			#{item.step},
+			#{item.after_process},
+			#{item.stack},
+			#{item.customer_nm},
+			#{item.prod_div},
+			#{item.layer},
+			#{item.model},
+			#{item.item_no},
+			#{item.lengh},
+			#{item.s_pi},
+			#{item.item_nm},
+			#{item.item_size_l},
+			#{item.item_size_r},
+			#{item.item_size_thin},
+			#{item.hole},
+			#{item.x_axis},
+			#{item.y_axis},
+			#{item.creator},
+           NOW()
+        )
+        </foreach>
+  </insert>
+  
+  <!-- 다중 삭제 -->
+<delete id="deleteP2Prod" parameterType="List">
+	DELETE FROM p2_prod_tbl
+	WHERE p2key IN
+	<foreach collection="list" item="item" open="(" separator="," close=")">
+	#{item.p2key}
+	</foreach>
+</delete>
+
+	<insert id="insertP2ProdLog" parameterType="java.util.Map" >
+    	INSERT INTO p2_prod_log_tbl
+		(
+			p2key,
+			dataseq,
+			in_date,
+			out_date,
+			pic,
+			lot_no,
+			pnl_cnt,
+			data_d,
+			special_note,
+			alarm_history,
+			prod_gubun,
+			step,
+			after_process,
+			stack,
+			customer_nm,
+			prod_div,
+			layer,
+			model,
+			item_no,
+			lengh,
+			s_pi,
+			item_nm,
+			item_size_l,
+			item_size_r,
+			item_size_thin,
+			hole,
+			x_axis,
+			y_axis,
+			creator,
+			date_created
+		)
+		VALUES
+		( 
+			#{p2key},
+			#{dataseq},
+			#{in_date},
+			#{out_date},
+			#{pic},
+			#{lot_no},
+			#{pnl_cnt},
+			#{data_d},
+			#{special_note},
+			#{alarm_history},
+			#{prod_gubun},
+			#{step},
+			#{after_process},
+			#{stack},
+			#{customer_nm},
+			#{prod_div},
+			#{layer},
+			#{model},
+			#{item_no},
+			#{lengh},
+			#{s_pi},
+			#{item_nm},
+			#{item_size_l},
+			#{item_size_r},
+			#{item_size_thin},
+			#{hole},
+			#{x_axis},
+			#{y_axis},
+			#{creator},
+			NOW()
+        )
+	</insert>
+	
+	<update id="updateP2ProdLog" parameterType="java.util.Map">
+		UPDATE p2_prod_log_tbl SET
+			in_date = #{in_date},
+			out_date = #{out_date},
+			pic = #{pic},
+			lot_no = #{lot_no},
+			pnl_cnt = #{pnl_cnt},
+			data_d = #{data_d},
+			special_note = #{special_note},
+			alarm_history = #{alarm_history}
+<!-- 			updater = #{updater}, -->
+<!-- 			date_updated = NOW() -->
+		WHERE
+			p2key = #{p2key}
+	</update>
+	
+	<select id="selectP2ProdLog" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			p2key,
+			dataseq,
+			DATE_FORMAT(in_date , '%y/%m/%d') AS in_date,
+			DATE_FORMAT(out_date , '%y/%m/%d') AS out_date,
+			DATE_FORMAT(in_date , '%Y%m%d') AS in_date_org,
+			DATE_FORMAT(out_date , '%Y%m%d') AS out_date_org,
+			pic,
+			lot_no,
+			pnl_cnt,
+			data_d,
+			special_note,
+			alarm_history,
+			prod_gubun,
+			step,
+			after_process,
+			stack,
+			customer_nm,
+			prod_div,
+			layer,
+			model,
+			item_no,
+			lengh,
+			s_pi,
+			item_nm,
+			item_size_l,
+			item_size_r,
+			item_size_thin,
+			hole,
+			x_axis,
+			y_axis,
+			creator,
+			DATE_FORMAT(date_created, '%Y-%m-%d %H:%i') AS date_created
+		FROM p2_prod_log_tbl WHERE 1=1
+		<if test="p2key !=null and !''.equals( p2key ) ">
+			AND p2key = #{p2key}
+		</if>
+		<if test="date_created !=null and !''.equals( date_created ) ">
+			AND date_format(date_created, '%Y%m%d') BETWEEN LEFT(#{date_created}, 8) AND RIGHT(#{date_created}, 8)
+		</if>
+		<if test="item_no != null and '' != item_no">
+			AND item_no LIKE CONCAT ('%', #{item_no}, '%')
+		</if> 
+		<if test="customer_nm != null and '' != customer_nm">
+			AND customer_nm LIKE CONCAT ('%', #{customer_nm}, '%')
+		</if> 
+	</select>
+	
+	<select id="chkSelectP2Prod" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			p2key,
+			dataseq,
+			prod_gubun,
+			step,
+			after_process,
+			stack,
+			customer_nm,
+			prod_div,
+			layer,
+			model,
+			item_no,
+			lengh,
+			s_pi,
+			item_nm,
+			item_size_l,
+			item_size_r,
+			item_size_thin,
+			hole,
+			x_axis,
+			y_axis,
+			creator,
+			date_created
+		FROM p2_prod_tbl WHERE
+			item_no = #{item_no} AND step = #{step}
+	</select>
+	
+	<delete id="deleteP2ProdLog" parameterType="java.util.Map">
+		DELETE FROM p2_prod_log_tbl
+		WHERE p2key = #{p2key}
+	</delete>
+	
+</mapper>
