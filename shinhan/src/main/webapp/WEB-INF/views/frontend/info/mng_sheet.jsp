@@ -472,7 +472,7 @@ String pageTitle = SessionUtil.getProperties("mes.company");
 						 		loadList();
 						    	fnMessageModalAlert("결과", "정상적으로 처리되었습니다."); // Notification(MES)
 					 		} else if(data.result == "코드없음"){
-					 			fnMessageModalAlert("결과", "Item No, STEP이 잘못되었습니다.");
+					 			fnMessageModalAlert("결과", "Item No 또는 STEP이 잘못되었습니다.");
 					 		} else {
 					 			fnMessageModalAlert("결과", "이미 등록된 항목이 존재합니다.");
 					 		}
