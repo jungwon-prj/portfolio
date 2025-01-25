@@ -1,0 +1,28 @@
+@page{
+/*   size: auto; */
+/*   margin: 5mm; */
+	margin-top: 5mm;
+
+}
+
+body
+{
+/*    margin: 5mm 5mm 5mm 5mm; margin you want for the content */
+}
+/* ---------------------------------------------- */
+
+
+@media print {
+	* {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust:exact; 
+	}
+}
+
+@media print {
+  footer {
+    position: fixed;
+    bottom: 0mm;
+  }
+}
+/* ---------------------------------------------- */
